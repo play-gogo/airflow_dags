@@ -1,12 +1,14 @@
 # The DAG object; we'll need this to instantiate a DAG
 
 from airflow import DAG
+from datetime import datetime, timedelta
+from textwrap import dedent
 
 # Operators; we need this to operate!
 
 from airflow.operators.bash import BashOperator
 from airflow.operators.dummy import DummyOperator
-
+from airflow.operators.empty import EmptyOperator
 with DAG(
 'ice_breaking',
 # These args will get passed on to each operator
@@ -24,3 +26,18 @@ start_date=datetime(2024, 7, 10),
 catchup=True,
 tags=['ice'],
 ) as dag:
+
+    start = EmptyOperator(task_id='start')
+    end = EmptyOperator(task_id='end')
+
+
+
+    ice = BashOperator(
+        task_id="ice",
+        bash_command="""
+            echo 'ice'
+        """
+    )
+
+
+    start >> ice >> end
