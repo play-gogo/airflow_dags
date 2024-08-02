@@ -1,3 +1,3 @@
 # First Project
 - first init
-- add release/d1.0.0
+- Add release/d1.0.0
