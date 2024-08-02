@@ -36,6 +36,7 @@ tags=['ice'],
     ice = BashOperator(
         task_id="ice",
         bash_command="""
+            bash ice.sh
             echo 'ice'
         """
     )
