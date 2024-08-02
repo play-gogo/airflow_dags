@@ -9,6 +9,7 @@ from textwrap import dedent
 from airflow.operators.bash import BashOperator
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.empty import EmptyOperator
+
 with DAG(
 'ice_breaking',
 # These args will get passed on to each operator
@@ -22,7 +23,7 @@ default_args={
 },
 description='ice breaking DAG',
 schedule_interval=timedelta(days=1),
-start_date=datetime(2024, 7, 10),
+start_date=datetime(2024, 7, 20),
 catchup=True,
 tags=['ice'],
 ) as dag:
