@@ -1,5 +1,6 @@
 # 2020년 박스오피스 영화데이터 조회
-
+ 
+ 
 ## 목차
 - [소개](#소개)
 - [기능](#기능)
@@ -9,8 +10,9 @@
 - [Contribution](#Contribution)
 - [라이선스](#라이선스)
 - [문의](#문의)
-
-
+ 
+ 
+ 
 ## 소개
 "2020년 박스오피스 영화 데이터 조회" 프로젝트는 2020년 동안 개봉된 영화들의 박스오피스 데이터를 수집하고 조회할 수 있는 애플리케이션입니다. 이 프로젝트는 영화 산업 분석가, 영화 팬, 마케터, 연구자들이 2020년 박스오피스 트렌드를 쉽게 파악하고 분석할 수 있도록 돕기 위해 만들어졌습니다.
 
@@ -22,12 +24,15 @@
 - 박스오피스 데이터 시각화(IN PROGRESS)
 
 이 프로젝트를 통해 사용자는 2020년 동안 영화 산업이 어떻게 변화했는지, 이를 기반으로 다양한 분석과 연구를 수행할 수 있습니다.
-
+ 
+ 
+  
 ## 기능
 - 기능 1: 2020년 박스오피스 영화 데이터 수집(Extract)
 - 기능 2: 2020년 박스오피스 영화 데이터 가공(Transform)
 - 기능 3: 2020년 박스오피스 영화 데이터 저장(Load)
-
+ 
+ 
 ### 기능 상세사항
 - 기능 1: 영화 데이터 수집은 [영화진흥위원회 오픈 API 소스](https://www.kobis.or.kr/kobisopenapi/homepg/apiservice/searchServiceInfo.do)를 이용
 - 기능 2: 수집된 영화 데이터의 데이터타입 변환 및 월별 트렌드 분석을 위한 컬럼 추가, 누적관객수 내림차순 정렬 
@@ -41,7 +46,8 @@ df['month'] = pd.to_datetime(df['load_dt']).dt.month
 ```python
 df.to_parquet("~/code/playgogo/storage", partition_cols=['month','load_dt'])
 ```
-
+ 
+  
 ### 기능 패키지
 - 각 기능에는 특정한 의존성(dependencies)이 필요합니다. 다음은 기능별로 필요한 패키지와 설치 방법에 대한 설명입니다.
 
@@ -82,7 +88,9 @@ $ pdm add pyarrow
 
 
 이와 같은 패키지 설치 과정을 통해 모든 기능을 정상적으로 사용할 수 있습니다. 필요한 패키지를 설치한 후 각 기능을 구현하는 코드를 실행하여 영화 데이터를 수집, 변환, 분석, 저장할 수 있습니다.
-
+ 
+ 
+  
 ## 사용법
 - 해당 애플리케이션을 사용하기 위해서는 Apache Airflow가 설치되어 있어야 합니다.
 
@@ -111,7 +119,9 @@ $ cat ~/airflow/standalone_admin_password.txt
 $ cd ~/code/playgogo/storage
 ```
 저장된 영화 데이터를 확인합니다.
-
+ 
+ 
+  
 ## Contribution
 play-gogo는 Contributor를 언제나 환영합니다. Contribution을 원하시면 다음 단계를 따라주세요:
 
@@ -121,10 +131,14 @@ play-gogo는 Contributor를 언제나 환영합니다. Contribution을 원하시
 4. 브랜치에 푸시합니다 (git push origin new-feature).
 5. 새로운 풀 리퀘스트를 생성합니다.
 6. 변경 사항에 따라 테스트 업데이트는 필수입니다.
-
+ 
+ 
+  
 ## 라이선스
 이 프로젝트는 play-gogo 라이선스에 따라 라이선스가 부과됩니다.
-
+ 
+ 
+  
 ## 문의
 질문이나 제안사항이 있으면 언제든지 연락주세요:
 - 이메일: play-gogo@play-gogo.com
