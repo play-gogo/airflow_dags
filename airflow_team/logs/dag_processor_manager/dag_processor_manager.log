@@ -1,5 +1,0 @@
-[2024-08-02T15:40:10.105+0900] {manager.py:470} INFO - Processing files using up to 1 processes at a time 
-[2024-08-02T15:40:10.106+0900] {manager.py:471} INFO - Process each file at most once every 30 seconds
-[2024-08-02T15:40:10.106+0900] {manager.py:472} INFO - Checking for new files in /Users/seon-u/code/play_gogo/airflow_dags/dags every 300 seconds
-[2024-08-02T15:40:10.106+0900] {manager.py:737} INFO - Searching for files in /Users/seon-u/code/play_gogo/airflow_dags/dags
-[2024-08-02T15:40:10.107+0900] {manager.py:740} INFO - There are 0 files in /Users/seon-u/code/play_gogo/airflow_dags/dags
