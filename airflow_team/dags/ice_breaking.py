@@ -9,6 +9,15 @@ from textwrap import dedent
 from airflow.operators.bash import BashOperator
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import (
+    ExternalPythonOperator,
+    PythonOperator,
+    PythonVirtualenvOperator,
+    is_venv_installed,
+    PythonVirtualenvOperator,
+    BranchPythonOperator,
+)
+
 
 with DAG(
 'ice_breaking',
@@ -28,18 +37,47 @@ catchup=True,
 tags=['ice'],
 ) as dag:
 
+##############################################
+
+    def p_data(ds_nodash):
+        from extrct.ice import ice_hun
+        import os
+        df = ice_hun()
+        home_dir = os.path.expanduser("~")
+        path = f'{home_dir}/playdata_go/Extrct/src/extrct'
+        print( "*" * 33)
+        print(df)
+        print( "*" * 33)
+
+
+
+
+##############################################
+
+
+
     start = EmptyOperator(task_id='start')
-    end = EmptyOperator(task_id='end')
+    end = EmptyOperator(task_id='end', trigger_rule="all_done")
 
 
 
-    ice = BashOperator(
-        task_id="ice",
-        bash_command="""
-            bash ice.sh
-            echo 'ice'
-        """
-    )
 
+    ice = PythonVirtualenvOperator(
+        task_id='ice.data',
+        python_callable=p_data,
+        system_site_packages=False,
+        #op_kwargs={"arg1":{"multiMovieYn":"Y"}},
+        requirements=["git+https://github.com/play-gogo/Extract.git@d1/0.1.0"],
+        )
+
+#    ice = BashOperator(
+#        task_id="ice",
+#        bash_command="""
+#            bash ice.sh
+#            echo 'ice'
+#        """
+#    )
+#    
+################################################
 
     start >> ice >> end
