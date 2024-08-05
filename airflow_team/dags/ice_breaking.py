@@ -37,23 +37,11 @@ catchup=True,
 tags=['ice'],
 ) as dag:
 
-##############################################
 
-    def p_data(ds_nodash):
+    def fun_ice(ds_nodash):
         from extrct.ice import ice_hun
         import os
         df = ice_hun()
-        home_dir = os.path.expanduser("~")
-        path = f'{home_dir}/playdata_go/Extrct/src/extrct'
-        print( "*" * 33)
-        print(df)
-        print( "*" * 33)
-
-
-
-
-##############################################
-
 
 
     start = EmptyOperator(task_id='start')
@@ -64,20 +52,10 @@ tags=['ice'],
 
     ice = PythonVirtualenvOperator(
         task_id='ice.data',
-        python_callable=p_data,
+        python_callable=fun_ice,
         system_site_packages=False,
-        #op_kwargs={"arg1":{"multiMovieYn":"Y"}},
         requirements=["git+https://github.com/play-gogo/Extract.git@d1/0.1.0"],
         )
 
-#    ice = BashOperator(
-#        task_id="ice",
-#        bash_command="""
-#            bash ice.sh
-#            echo 'ice'
-#        """
-#    )
-#    
-################################################
 
     start >> ice >> end
