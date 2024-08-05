@@ -112,7 +112,7 @@ $ cd ~/code/playgogo/storage
 ```
 저장된 영화 데이터를 확인합니다.
 
-## Contibution
+## Contribution
 play-gogo는 Contributor를 언제나 환영합니다. Contribution을 원하시면 다음 단계를 따라주세요:
 
 1. 저장소를 포크합니다.
