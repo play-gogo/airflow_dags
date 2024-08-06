@@ -24,7 +24,7 @@ with DAG(
 # These args will get passed on to each operator
 # You can override them on a per-task basis during operator initialization
 default_args={
-'depends_on_past': True,
+'depends_on_past': False,
 'email_on_failure': False,
 'email_on_retry': False,
 'retries': 1,
@@ -32,7 +32,7 @@ default_args={
 },
 description='movie 2020 DAG',
 schedule_interval=timedelta(days=1),
-start_date=datetime(2020, 1, 1),
+start_date=datetime(2020, 6, 28),
 end_date=datetime(2020, 12, 31),
 catchup=True,
 tags=['movie'],
@@ -64,7 +64,22 @@ tags=['movie'],
 
         from load.load import load
         load(load_dt=dt)
-        
+    
+    def branch_fun(ds_nodash):
+        import os
+        home_dir = os.path.expanduser("~")
+        month=int(ds_nodash[4:6])
+        path = os.path.join(home_dir, f"code/playgogo/storage/month={month}/load_dt={ds_nodash}")
+        print('*' * 30)
+        print(path)
+        print('*' * 30)   
+
+        if os.path.exists(path):
+            print('존재')
+            return "rm.dir" #rmdir.task_id
+        else:
+            print('존재x')
+            return "load"
 
     start = EmptyOperator(task_id='start')
     end = EmptyOperator(task_id='end', trigger_rule="all_done")
@@ -89,10 +104,30 @@ tags=['movie'],
     load = PythonVirtualenvOperator(
             task_id='load',
             python_callable=fun_load,
+            trigger_rule="all_done",
             requirements=["git+https://github.com/play-gogo/load.git@d2/0.1.0"],
             system_site_packages=False,
             op_args=["{{ds_nodash}}"]
     )
-            
 
-    start >> extract >> transform >> load >> end
+    branch_op = BranchPythonOperator(
+            task_id="branch.op",
+            python_callable=branch_fun
+    )
+    rm_dir = BashOperator(
+            task_id='rm.dir',
+            bash_command="""
+                month=$(echo "{{ ds_nodash[4:6] }}" | awk '{print $1+0}');
+                echo $month
+                echo code/playgogo/storage/month=$month/load_dt={{ds_nodash}}
+                rm -rf ~/code/playgogo/storage/month=$month/load_dt={{ds_nodash}}
+            """
+
+    )
+
+    start >> extract >> transform 
+    transform >> branch_op
+    branch_op >> rm_dir
+    branch_op >> load
+
+    rm_dir >> load >> end
