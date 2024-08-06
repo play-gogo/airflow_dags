@@ -93,11 +93,6 @@ tags=['movie'],
             system_site_packages=False,
             op_args=["{{ds_nodash}}"]
     )
-    rm = BashOperator(
-        task_id='rm',
-        bash_command="""
             
-        """
-    )
 
     start >> extract >> transform >> load >> end
