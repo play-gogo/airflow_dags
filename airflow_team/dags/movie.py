@@ -32,7 +32,7 @@ default_args={
 },
 description='movie 2020 DAG',
 schedule_interval=timedelta(days=1),
-start_date=datetime(2020, 1, 1),
+start_date=datetime(2020, 6, 28),
 end_date=datetime(2020, 12, 31),
 catchup=True,
 tags=['movie'],
@@ -114,10 +114,15 @@ tags=['movie'],
             task_id="branch.op",
             python_callable=branch_fun
     )
-    
     rm_dir = BashOperator(
             task_id='rm.dir',
-            bash_command='rm -rf code/playgogo/storage/month={month}/load_dt={ds_nodash}'
+            bash_command="""
+                month=$(echo "{{ ds_nodash[4:6] }}" | awk '{print $1+0}');
+                echo $month
+                echo code/playgogo/storage/month=$month/load_dt={{ds_nodash}}
+                rm -rf ~/code/playgogo/storage/month=$month/load_dt={{ds_nodash}}
+            """
+
     )
 
     start >> extract >> transform 
